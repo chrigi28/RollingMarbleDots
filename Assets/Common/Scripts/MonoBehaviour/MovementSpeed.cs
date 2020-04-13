@@ -9,10 +9,12 @@ using UnityEngine.Rendering;
 public class MovementSpeed : MonoBehaviour
 {
     [SerializeField] private float3 movementMultiplier = float3.zero;
-
-    private static MovementSpeed Instance;
+    static MovementSpeed Instance;
     private Entity entity;
-    private EntityManager manager;
+    private EntityManager manager = null;
+    private float3 oldValue;
+    private EntityQuery singletonGroup;
+    
     void Awake()
     {
         if (Instance != null)
@@ -24,11 +26,19 @@ public class MovementSpeed : MonoBehaviour
 
         Instance = this;
         manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        entity = manager.CreateEntity(ComponentType.ReadOnly<PhysicsSpeedMultiplier>());
+        var ent = manager.CreateEntity(typeof(PhysicsSpeedMultiplier));
+        manager.AddComponent(ent, typeof(PhysicsSpeedMultiplier));
+        singletonGroup = manager.CreateEntityQuery(typeof(PhysicsSpeedMultiplier));
+        singletonGroup.SetSingleton<PhysicsSpeedMultiplier>(new PhysicsSpeedMultiplier {Value = this.movementMultiplier});
     }
 
     void Update()
     {
-        manager.SetComponentData(entity, new PhysicsSpeedMultiplier { Value = movementMultiplier });
+        if (!oldValue.Equals(this.movementMultiplier))
+        {
+            manager.SetComponentData(entity, new PhysicsSpeedMultiplier {Value = movementMultiplier});
+            oldValue = movementMultiplier;
+            singletonGroup.SetSingleton(new PhysicsSpeedMultiplier{Value = this.movementMultiplier});
+        }
     }
 }

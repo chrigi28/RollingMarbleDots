@@ -11,18 +11,19 @@ using UnityEngine.InputSystem;
 class UpdatePlayerPositionSystem : ComponentSystem
 {
     private float3 multiplier;
-
+    private EntityQuery singletonGroup;
     protected override void OnCreate()
     {
         EntityManager.CreateEntity(typeof(CharacterControllerInput));
+        singletonGroup = EntityManager.CreateEntityQuery(typeof(PhysicsSpeedMultiplier));
     }
 
     protected override void OnUpdate()
     {
         var dt = Time.DeltaTime;
         var inputData = EntityManager.GetComponentData<CharacterControllerInput>(GetSingletonEntity<CharacterControllerInput>());
-        multiplier = EntityManager.GetComponentData<PhysicsSpeedMultiplier>(GetSingletonEntity<PhysicsSpeedMultiplier>()).Value;
-    
+        multiplier = singletonGroup.GetSingleton<PhysicsSpeedMultiplier>().Value;
+        
         var move = new float3(inputData.Movement.x, inputData.Jumped ? 1 : 0, inputData.Movement.y);
         move *= multiplier * dt;
         inputData.Movement = float2.zero;
