@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1357867726654781255}
   - component: {fileID: 1357867726654781248}
   - component: {fileID: 2710725692727935464}
+  - component: {fileID: 3642084436663600388}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -97,7 +98,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 899bc411f7fc03f4b8df7907372b45b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 5, z: -8}
+  offset:
+    x: 0
+    y: 5
+    z: -8
+--- !u!114 &3642084436663600388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1357867726654781249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cc05a04ee9dea44fa46dbe1b551a481, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementMultiplier:
+    x: 0
+    y: 0
+    z: 0
 --- !u!1 &1357867726848807436
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,6 +163,7 @@ GameObject:
   - component: {fileID: 1357867726873067495}
   - component: {fileID: 1165604059612894560}
   - component: {fileID: 5547838745719349873}
+  - component: {fileID: 761129124799205901}
   - component: {fileID: 2390444599841514890}
   m_Layer: 0
   m_Name: Physics Settings
@@ -205,6 +226,22 @@ MonoBehaviour:
     z: -0
   SolverIterationCount: 4
   ThreadCountHint: 8
+--- !u!114 &761129124799205901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1357867726873067490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cc05a04ee9dea44fa46dbe1b551a481, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementMultiplier:
+    x: 10
+    y: 20
+    z: 15
 --- !u!114 &2390444599841514890
 MonoBehaviour:
   m_ObjectHideFlags: 0
