@@ -67,6 +67,7 @@ namespace Assets.Common.Scripts
             random = new Random((uint)level);
             this.GenerateFloor(numberOfFloors);
             this.GenerateObstacles(level);
+            this.GeneratePlayer();
         }
 
         private void GenerateObstacles(int level)
@@ -76,7 +77,6 @@ namespace Assets.Common.Scripts
             var entity = prefabEntities["Cube"];
             this.EntityManager.Instantiate(entity, obstacles);
 
-            float3 pos;
             var firstLastPos = 12.5f;
             float3 min = new float3(-5, 2, firstLastPos);
             float3 max = new float3(5, 3, this.levelLength - firstLastPos);
@@ -85,8 +85,6 @@ namespace Assets.Common.Scripts
             {
                 this.EntityManager.AddComponent(obstacles[z], typeof(NonUniformScale));
                 this.EntityManager.AddComponentData(obstacles[z], new NonUniformScale { Value = random.NextFloat3(new float3(0.5f, 0.75f, 0.5f), new float3(6, 5, 3)) });
-                ////this.EntityManager.SetComponentData(obstacles[z], new Scale { Value = random.NextFloat(0.5f, 5) }); ////NextFloat3(new float3(0.5f, 0.75f, 0.5f), new float3(6, 5, 3)) });
-                ////this.EntityManager.SetComponentData(obstacles[z], new NonUniformScale { Value = random.NextFloat3(new float3(0.5f, 0.75f, 0.5f), new float3(6, 5, 3)) });
                 this.EntityManager.SetComponentData(obstacles[z], new Translation { Value = random.NextFloat3(min, max) });
                 this.EntityManager.SetComponentData(obstacles[z], new Rotation { Value = random.NextQuaternionRotation() });
             }
@@ -112,6 +110,13 @@ namespace Assets.Common.Scripts
             }
 
             grounds.Dispose();
+        }
+
+        private void GeneratePlayer()
+        {
+            var entity = prefabEntities["Ball"];
+            var ball = this.EntityManager.Instantiate(entity);
+            this.EntityManager.SetComponentData(ball, new Translation {Value = new float3(0,1,0)});
         }
     }
 }
