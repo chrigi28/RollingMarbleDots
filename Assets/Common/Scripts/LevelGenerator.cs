@@ -2,11 +2,14 @@
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using BoxCollider = Unity.Physics.BoxCollider;
+using Collider = Unity.Physics.Collider;
 using Random = Unity.Mathematics.Random;
 
 namespace Assets.Common.Scripts
@@ -74,17 +77,21 @@ namespace Assets.Common.Scripts
         {
             var numberOfObstacles = 125;
             var obstacles = new NativeArray<Entity>(numberOfObstacles, Allocator.Temp);
-            var entity = prefabEntities["Cube"];
-            this.EntityManager.Instantiate(entity, obstacles);
+            var prefabEntity = prefabEntities["Cube"];
+            this.EntityManager.Instantiate(prefabEntity, obstacles);
 
             var firstLastPos = 12.5f;
             float3 min = new float3(-5, 2, firstLastPos);
             float3 max = new float3(5, 3, this.levelLength - firstLastPos);
 
+            float3 cubesize;
             for (int z = 0; z < numberOfObstacles; z++)
             {
                 this.EntityManager.AddComponent(obstacles[z], typeof(NonUniformScale));
-                this.EntityManager.AddComponentData(obstacles[z], new NonUniformScale { Value = random.NextFloat3(new float3(0.5f, 0.75f, 0.5f), new float3(6, 5, 3)) });
+                cubesize = random.NextFloat3(new float3(0.5f, 0.75f, 0.5f), new float3(6, 5, 3));
+                this.EntityManager.AddComponentData(obstacles[z], new NonUniformScale { Value = cubesize });
+                var newCollider = Unity.Physics.BoxCollider.Create(new BoxGeometry {Center = float3.zero, Size = cubesize, BevelRadius = 0f, Orientation = Quaternion.identity });
+                this.EntityManager.SetComponentData(obstacles[z], new PhysicsCollider{Value = newCollider});
                 this.EntityManager.SetComponentData(obstacles[z], new Translation { Value = random.NextFloat3(min, max) });
                 this.EntityManager.SetComponentData(obstacles[z], new Rotation { Value = random.NextQuaternionRotation() });
             }
@@ -116,7 +123,7 @@ namespace Assets.Common.Scripts
         {
             var entity = prefabEntities["Ball"];
             var ball = this.EntityManager.Instantiate(entity);
-            this.EntityManager.SetComponentData(ball, new Translation {Value = new float3(0,1,0)});
+            this.EntityManager.SetComponentData(ball, new Translation { Value = new float3(0, 1, 0) });
         }
     }
 }

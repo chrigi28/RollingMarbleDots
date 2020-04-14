@@ -46,61 +46,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Gyro",
-                    "id": "80886222-311d-41f3-955d-4887f216c4c9",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Mobile",
-                    "action": "Move",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "b7d3384c-bc85-48c4-ad0d-6521ffc5797e",
-                    "path": "<Accelerometer>/acceleration/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Mobile",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "fec69ca0-a19a-4efa-a1d7-1795c6eca146",
-                    "path": "<Accelerometer>/acceleration/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Mobile",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "631e26c6-d824-4387-b6c7-53df06266126",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Mobile",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "de9d2a9f-41f0-4547-a3f8-b38a29de0291",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Mobile",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "WSDA",
                     "id": "ecde8625-6b73-497b-9da7-752df97f282c",
                     "path": "2DVector",
@@ -206,6 +151,39 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Gyro",
+                    "id": "9b352903-66e4-42bc-a102-23c1dce0aacf",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "cb16eb6c-2563-447c-9ad0-2f39e636e9a1",
+                    "path": "<Gyroscope>/angularVelocity/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mobile",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "d5e59703-57e4-433b-82dd-c481cf6f2f93",
+                    "path": "<Gyroscope>/angularVelocity/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mobile",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
