@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 959eccfeb940d0e4b9bff9d7d3841c5a, type: 2}
+  - {fileID: 2100000, guid: 72cbb9b6bdaea2b42958a68aa792c8bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -136,8 +136,8 @@ MonoBehaviour:
     m_Friction:
       m_Override: 0
       m_Value:
-        Value: 0.6
-        CombineMode: 0
+        Value: 1
+        CombineMode: 1
     m_Restitution:
       m_Override: 0
       m_Value:
@@ -169,9 +169,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_MotionType: 0
-  m_Mass: 1
-  m_LinearDamping: 0.01
-  m_AngularDamping: 0.05
+  m_Mass: 3
+  m_LinearDamping: 0.1
+  m_AngularDamping: 3
   m_InitialLinearVelocity:
     x: 0
     y: 0

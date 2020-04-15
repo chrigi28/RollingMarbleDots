@@ -172,6 +172,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 761129124799205901, guid: c0ce7b3c74021e840a5995cf136ee0fe,
+        type: 3}
+      propertyPath: movementMultiplier.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 761129124799205901, guid: c0ce7b3c74021e840a5995cf136ee0fe,
+        type: 3}
+      propertyPath: movementMultiplier.y
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 1357867726848807427, guid: c0ce7b3c74021e840a5995cf136ee0fe,
         type: 3}
       propertyPath: m_LocalPosition.x

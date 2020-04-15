@@ -24,12 +24,11 @@ class UpdatePlayerPositionSystem : ComponentSystem
         var inputData = EntityManager.GetComponentData<CharacterControllerInput>(GetSingletonEntity<CharacterControllerInput>());
         multiplier = singletonGroup.GetSingleton<PhysicsSpeedMultiplier>().Value;
         
-        var move = new float3(inputData.Movement.x, inputData.Jumped ? 1 : 0, inputData.Movement.y);
+        var move = new float3(inputData.Movement.x, inputData.Jumped ? 10 : 0, inputData.Movement.y);
         move *= multiplier * dt;
         inputData.Movement = float2.zero;
         Entities.WithAll<PlayerTagComponent>().ForEach((ref PhysicsVelocity _physicsVelocity, ref PhysicsMass _physicsMass) =>
         {
-
             ComponentExtensions.ApplyLinearImpulse(ref _physicsVelocity, _physicsMass, move);
         });
     }
