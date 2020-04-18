@@ -26,15 +26,15 @@ public class MovementSpeed : MonoBehaviour
 
         Instance = this;
         manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        var ent = manager.CreateEntity(typeof(PhysicsSpeedMultiplier));
-        manager.AddComponent(ent, typeof(PhysicsSpeedMultiplier));
+        entity = manager.CreateEntity(typeof(PhysicsSpeedMultiplier));
+        manager.AddComponent(entity, typeof(PhysicsSpeedMultiplier));
         singletonGroup = manager.CreateEntityQuery(typeof(PhysicsSpeedMultiplier));
         singletonGroup.SetSingleton<PhysicsSpeedMultiplier>(new PhysicsSpeedMultiplier {Value = this.movementMultiplier});
     }
 
     void Update()
     {
-        if (!oldValue.Equals(this.movementMultiplier))
+        if (entity != Entity.Null && !oldValue.Equals(this.movementMultiplier)) 
         {
             manager.SetComponentData(entity, new PhysicsSpeedMultiplier {Value = movementMultiplier});
             oldValue = movementMultiplier;

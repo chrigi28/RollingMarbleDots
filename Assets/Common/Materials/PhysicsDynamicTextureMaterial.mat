@@ -21,8 +21,9 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PhysicsDynamicTextureMaterial
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP _SPECULARHIGHLIGHTS_OFF
+  m_Shader: {fileID: -6465566751694194690, guid: 638df973e11dcbf4d9350bc3d4cb6df2,
+    type: 3}
+  m_ShaderKeywords: _METALLICSPECGLOSSMAP _NORMALMAP _OCCLUSIONMAP _SPECULARHIGHLIGHTS_OFF
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -33,7 +34,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 78d9f074af3015249980961afabcdc72, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseTexture:
@@ -88,8 +89,40 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_337D9543_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 78d9f074af3015249980961afabcdc72, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_4986538A_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 78d9f074af3015249980961afabcdc72, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_792420A6_Texture:
         m_Texture: {fileID: 2800000, guid: 3082327edf99c3a4c94fc7c95801c018, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_B9350A38_Texture_1:
+        m_Texture: {fileID: 2800000, guid: c58f4da3644214a489cc739ea5672ed0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_CD759E77_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 69da55544f6762a4a90eea5678f08611, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_CE2FC12_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 42c48bee995f8dd4fb90ba937734a80e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_DD566CE9_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 42c48bee995f8dd4fb90ba937734a80e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_E71FC34B_Texture_1:
+        m_Texture: {fileID: 2800000, guid: c58f4da3644214a489cc739ea5672ed0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_E76133D0_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 69da55544f6762a4a90eea5678f08611, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -135,6 +168,7 @@ Material:
     - Color_4F18FDD0: {r: 0, g: 0, b: 0, a: 0}
     - Color_AC52ADAA: {r: 0.5943396, g: 0.5376669, b: 0.08130119, a: 0}
     - _BandColor: {r: 0.9921569, g: 0.7215686, b: 0.07450981, a: 0}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 0}
     - _CellColorA: {r: 1, g: 1, b: 1, a: 1}
     - _CellColorB: {r: 0.8, g: 0.8, b: 0.8, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 0}
