@@ -50,7 +50,7 @@ public class @InputActions : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""70135241-ffae-4718-b4a0-5abad08ac03a"",
-                    ""path"": ""<Touchscreen>/primaryTouch"",
+                    ""path"": ""<Touchscreen>/primaryTouch/tapCount"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Mobile"",
