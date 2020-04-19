@@ -34,11 +34,7 @@ namespace Assets
                 Destroy(gameObject);
                 return;
             }
-
-            this.canvasScript = this.Canvas.GetComponent<CanvasScript>();
-            this.DisableMenus();
         }
-
 
         private void InitGameVariables()
         {
@@ -48,7 +44,8 @@ namespace Assets
 
         void Start()
         {
-            timerScript = this.Canvas.GetComponent<TimerScript>();
+            this.canvasScript = this.Canvas.GetComponent<CanvasScript>();
+            this.timerScript = this.Canvas.GetComponent<TimerScript>();
             this.DisableMenus();
         }
 
