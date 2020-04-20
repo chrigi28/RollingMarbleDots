@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Assets.Common.Scripts.Components;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -28,8 +29,6 @@ public class MovementSpeed : MonoBehaviour
         manager = World.DefaultGameObjectInjectionWorld.EntityManager;
         entity = manager.CreateEntity(typeof(PhysicsSpeedMultiplier));
         manager.AddComponent(entity, typeof(PhysicsSpeedMultiplier));
-        singletonGroup = manager.CreateEntityQuery(typeof(PhysicsSpeedMultiplier));
-        singletonGroup.SetSingleton<PhysicsSpeedMultiplier>(new PhysicsSpeedMultiplier {Value = this.movementMultiplier});
     }
 
     void Update()
@@ -38,7 +37,7 @@ public class MovementSpeed : MonoBehaviour
         {
             manager.SetComponentData(entity, new PhysicsSpeedMultiplier {Value = movementMultiplier});
             oldValue = movementMultiplier;
-            singletonGroup.SetSingleton(new PhysicsSpeedMultiplier{Value = this.movementMultiplier});
+            MessageCenter<IMultiplierMessage>.Send(new MultiplierMessage(){Multiplier = movementMultiplier});
         }
     }
 }

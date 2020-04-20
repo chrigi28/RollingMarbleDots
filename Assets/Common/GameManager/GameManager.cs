@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography.X509Certificates;
+using Assets.Common.Scripts.Components;
 using Assets.Scripts;
 using Assets.Scripts.GameData;
 using TMPro;
@@ -9,7 +10,7 @@ using UnityEngine.UI;
 
 namespace Assets
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviour, IMessageReceiver<IGameStateChangeMessage>
     {
         public static GameManager Instance { get; private set; }
 
@@ -28,6 +29,7 @@ namespace Assets
                 DontDestroyOnLoad(gameObject);
 
                 this.InitGameVariables();
+                MessageCenter<IGameStateChangeMessage>.Register(this);
             }
             else
             {
@@ -47,11 +49,6 @@ namespace Assets
             this.canvasScript = this.Canvas.GetComponent<CanvasScript>();
             this.timerScript = this.Canvas.GetComponent<TimerScript>();
             this.DisableMenus();
-        }
-
-        void OnEnable()
-        {
-        
         }
 
         public void RestartLevel()
@@ -130,7 +127,6 @@ namespace Assets
 
         public void ShowHome()
         {
-
             SceneManager.LoadScene(0);
             Debug.Log("Settings Requested");
         }
@@ -168,6 +164,24 @@ namespace Assets
             Time.timeScale = 0;
             gameState = EGameState.Paused;
             this.canvasScript.SetGameOver(true);
+        }
+
+        public void ExecuteMessage(IGameStateChangeMessage m)
+        {
+            if (m.Finish)
+            {
+                this.FinishLevel();
+            }
+
+            if (m.GameOver)
+            {
+                this.GameOver();
+            }
+
+            if (m.Pause)
+            {
+                this.PauseGame();
+            }
         }
     }
 }
