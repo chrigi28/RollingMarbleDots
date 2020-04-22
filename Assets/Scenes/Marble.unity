@@ -360,7 +360,7 @@ PrefabInstance:
     - target: {fileID: 761129124799205901, guid: c0ce7b3c74021e840a5995cf136ee0fe,
         type: 3}
       propertyPath: movementMultiplier.y
-      value: 150
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 761129124799205901, guid: c0ce7b3c74021e840a5995cf136ee0fe,
         type: 3}
