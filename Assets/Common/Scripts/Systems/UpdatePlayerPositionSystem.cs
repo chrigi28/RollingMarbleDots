@@ -33,7 +33,7 @@ class UpdatePlayerPositionSystem : ComponentSystem, IMessageReceiver<IMultiplier
             move *= multiplier * dt;
             inputData.Movement = float2.zero;
             Entities.WithAll<PlayerTagComponent>().ForEach(
-                (ref PhysicsVelocity _physicsVelocity, ref PhysicsMass _physicsMass, ref Translation trans) =>
+                (ref PhysicsVelocity _physicsVelocity, ref PhysicsMass _physicsMass) =>
                 {
                     ComponentExtensions.ApplyLinearImpulse(ref _physicsVelocity, _physicsMass, move);
                 });
