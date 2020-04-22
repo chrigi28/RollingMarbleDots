@@ -134,6 +134,7 @@ namespace Assets
         public void FinishLevel()
         {
             Debug.Log("GameFinished");
+            this.StopPhysicsWorld();
             var time = this.timerScript.GetTime();
             var bestTime = this.playerdata.GetBestTimeOfCurrentLevel();
             if (time < bestTime)
@@ -152,6 +153,11 @@ namespace Assets
             // show next start level
             // show level select 
             // show go home
+        }
+
+        private void StopPhysicsWorld()
+        {
+            // todo stop time
         }
 
         public void SetGameState(EGameState state)

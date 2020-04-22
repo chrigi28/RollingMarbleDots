@@ -8,8 +8,6 @@ using Unity.Transforms;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
-using BoxCollider = Unity.Physics.BoxCollider;
-using Collider = Unity.Physics.Collider;
 using Random = Unity.Mathematics.Random;
 
 namespace Assets.Common.Scripts
@@ -71,6 +69,12 @@ namespace Assets.Common.Scripts
             this.GenerateFloor(numberOfFloors);
             this.GenerateObstacles(level);
             this.GeneratePlayer();
+            this.GenerateFinish();
+        }
+
+        private void GenerateFinish()
+        {
+            
         }
 
         private void GenerateObstacles(int level)
