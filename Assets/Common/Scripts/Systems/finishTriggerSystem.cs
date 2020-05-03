@@ -7,7 +7,7 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using UnityEngine;
 
-public class finishTriggerSystem : JobComponentSystem
+public class FinishTriggerSystem : JobComponentSystem
 {
     private BuildPhysicsWorld buildworld;
     private StepPhysicsWorld steworld;
@@ -16,7 +16,7 @@ public class finishTriggerSystem : JobComponentSystem
     {
         public void Execute(TriggerEvent eventTrigger)
         {
-            MessageCenter<IGameStateChangeMessage>.Send(new GameStateChangeMessage { Finish = true });
+            EventCenter.GameStateChangeEvent.Invoke(new GameStateChangeMessage{ Finish = true });
         }
     }
 
@@ -28,6 +28,8 @@ public class finishTriggerSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        return new TriggerJob().Schedule(steworld.Simulation, ref buildworld.PhysicsWorld, inputDeps);
+        var a = new TriggerJob().Schedule(steworld.Simulation, ref buildworld.PhysicsWorld, inputDeps);
+        a.Complete();
+        return a; 
     }
 }

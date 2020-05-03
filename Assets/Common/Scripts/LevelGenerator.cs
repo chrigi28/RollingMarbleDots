@@ -14,8 +14,7 @@ namespace Assets.Common.Scripts
 {
     public class LevelGenerator : MonoBehaviour
     {
-        [SerializeField] private int level = 1;
-
+        private int noOfOb = 200;
         private Dictionary<string, Entity> prefabEntities;
         private Dictionary<string, GameObject> prefabGameObjects;
         private BlobAssetStore blobAssetStore;
@@ -23,6 +22,11 @@ namespace Assets.Common.Scripts
         private Random random;
         private float groundlenght;
         private float levelLength;
+        
+        private Entity ball;
+        private Entity finish;
+        private NativeArray<Entity> grounds;
+        private NativeArray<Entity> obstacles;
 
         void Awake()
         {
@@ -30,23 +34,25 @@ namespace Assets.Common.Scripts
             this.EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             blobAssetStore = new BlobAssetStore();
             this.GetPrefabs();
-            this.GenerateLevel(level);
+            this.GenerateEntities();
+            this.SetUpLevel(1, 125, 750f);
         }
 
         void OnDestroy()
         {
-            blobAssetStore.Dispose();
+            this.grounds.Dispose();
+            this.obstacles.Dispose();
+            this.blobAssetStore.Dispose();
         }
 
-        /// <summary>
-        /// Get prefabs from Resourcefolder and store them in a dictionary as GO
+        /// <summary>Get prefabs from Resourcefolder and store them in a dictionary as GO
         /// Also convert them to Entity and store in dictionary for entity prefab
         /// </summary>
         private void GetPrefabs()
         {
             prefabEntities = new Dictionary<string, Entity>();
             prefabGameObjects = new Dictionary<string, GameObject>();
-            var prefabsToInitialize = new List<string> { "Floor", "Ball", "Cube" };
+            var prefabsToInitialize = new List<string> { "Floor", "Ball", "Cube", "FinishPrefab" };
 
             foreach (var prefab in prefabsToInitialize)
             {
@@ -58,54 +64,46 @@ namespace Assets.Common.Scripts
             }
         }
 
-        /// <summary>
-        /// Instantiate a bunch of floors along the z axis
-        /// </summary>
-        /// <param name="level">handles the obstacle at later state</param>
-        public void GenerateLevel(int level)
+        /// <summary>Instantiate a bunch of floors along the z axis</summary>
+        public void GenerateEntities()
         {
-            int numberOfFloors = 75;
-            random = new Random((uint)level);
-            this.GenerateFloor(numberOfFloors);
-            this.GenerateObstacles(level);
+            this.GenerateFloors();
+            this.GenerateObstacles();
             this.GeneratePlayer();
             this.GenerateFinish();
         }
 
-        private void GenerateFinish()
+        private void GenerateFinish(float zPos = 750f)
         {
-            
-        }
-
-        private void GenerateObstacles(int level)
-        {
-            var numberOfObstacles = 125;
-            var obstacles = new NativeArray<Entity>(numberOfObstacles, Allocator.Temp);
-            var prefabEntity = prefabEntities["Cube"];
-            this.EntityManager.Instantiate(prefabEntity, obstacles);
-
-            var firstLastPos = 12.5f;
-            float3 min = new float3(-5, 2, firstLastPos);
-            float3 max = new float3(5, 3, this.levelLength - firstLastPos);
-
-            float3 cubesize;
-            for (int z = 0; z < numberOfObstacles; z++)
+            if (this.finish == Entity.Null)
             {
-                this.EntityManager.AddComponent(obstacles[z], typeof(NonUniformScale));
-                cubesize = random.NextFloat3(new float3(0.5f, 0.75f, 0.5f), new float3(6, 5, 3));
-                this.EntityManager.AddComponentData(obstacles[z], new NonUniformScale { Value = cubesize });
-                var newCollider = Unity.Physics.BoxCollider.Create(new BoxGeometry {Center = float3.zero, Size = cubesize, BevelRadius = 0f, Orientation = Quaternion.identity });
-                this.EntityManager.SetComponentData(obstacles[z], new PhysicsCollider{Value = newCollider});
-                this.EntityManager.SetComponentData(obstacles[z], new Translation { Value = random.NextFloat3(min, max) });
-                this.EntityManager.SetComponentData(obstacles[z], new Rotation { Value = random.NextQuaternionRotation() });
+                var entity = prefabEntities["FinishPrefab"];
+                this.finish = this.EntityManager.Instantiate(entity);
             }
 
-            obstacles.Dispose();
+            this.EntityManager.SetComponentData(this.finish, new Translation { Value = new float3(0, 0.01f, zPos) });
+            this.EntityManager.SetComponentData(this.finish, new Rotation { Value = Quaternion.Euler(0, 0, 0) });
         }
 
-        private void GenerateFloor(int numberOfFloors)
+        private void GenerateObstacles()
         {
-            var grounds = new NativeArray<Entity>(numberOfFloors, Allocator.Temp);
+            this.obstacles = new NativeArray<Entity>(this.noOfOb, Allocator.Persistent);
+            var prefabEntity = prefabEntities["Cube"];
+            this.EntityManager.Instantiate(prefabEntity, this.obstacles);
+            this.DisableEntities(this.obstacles);
+        }
+
+        private void DisableEntities(NativeArray<Entity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                this.EntityManager.SetEnabled(entity, false);
+            }
+        }
+
+        private void GenerateFloors(int numberOfFloors = 100)
+        {
+            this.grounds = new NativeArray<Entity>(numberOfFloors, Allocator.Persistent);
             var entity = prefabEntities["Floor"];
             this.EntityManager.Instantiate(entity, grounds);
             this.groundlenght = prefabGameObjects["Floor"].transform.localScale.z;
@@ -119,15 +117,47 @@ namespace Assets.Common.Scripts
                 this.EntityManager.SetComponentData(grounds[z], new Translation { Value = pos });
                 ////this.EntityManager.SetComponentData(grounds[y], new Rotation { Value = Quaternion.Euler(tempRot) });
             }
-
-            grounds.Dispose();
         }
 
         private void GeneratePlayer()
         {
             var entity = prefabEntities["Ball"];
-            var ball = this.EntityManager.Instantiate(entity);
+            this.ball = this.EntityManager.Instantiate(entity);
             this.EntityManager.SetComponentData(ball, new Translation { Value = new float3(0, 1, 0) });
+        }
+
+        public void SetUpLevel(int level, int numberOfObstacles, float levelLength, float firstLastPos = 12.5f)
+        {
+            this.EnableGrounds(levelLength);
+
+            random = new Random((uint)level);
+            float3 min = new float3(-5, 2, firstLastPos);
+            float3 max = new float3(5, 3, levelLength - firstLastPos);
+
+            float3 cubesize;
+            for (int z = 0; z < numberOfObstacles; z++)
+            {
+                var obstacle = this.obstacles[z];
+                cubesize = random.NextFloat3(new float3(0.5f, 0.75f, 0.5f), new float3(6, 5, 3));
+                this.EntityManager.AddComponentData(obstacle, new NonUniformScale { Value = cubesize });
+                var newCollider = Unity.Physics.BoxCollider.Create(new BoxGeometry { Center = float3.zero, Size = cubesize, BevelRadius = 0f, Orientation = Quaternion.identity });
+                this.EntityManager.SetComponentData(obstacle, new PhysicsCollider { Value = newCollider });
+                this.EntityManager.SetComponentData(obstacle, new Translation { Value = random.NextFloat3(min, max) });
+                this.EntityManager.SetComponentData(obstacle, new Rotation { Value = random.NextQuaternionRotation() });
+                this.EntityManager.SetEnabled(obstacle, true);
+            }
+        }
+
+        private void EnableGrounds(float levelLength)
+        {
+            var numberOfGrounds = levelLength / this.groundlenght;
+            numberOfGrounds++;
+
+            var index = 0;
+            foreach (var ground in this.grounds)
+            {
+                this.EntityManager.SetEnabled(ground, index < numberOfGrounds);
+            }
         }
     }
 }

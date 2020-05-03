@@ -1,16 +1,21 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using Assets.Common.Scripts;
 using Assets.Common.Scripts.Components;
 using Assets.Scripts;
 using Assets.Scripts.GameData;
 using TMPro;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace Assets
 {
-    public class GameManager : MonoBehaviour, IMessageReceiver<IGameStateChangeMessage>
+    public class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
 
@@ -20,7 +25,10 @@ namespace Assets
         private GameObject currentLevel;
         private CanvasScript canvasScript;
         private TimerScript timerScript;
-        private PlayerData playerdata;        
+        private PlayerData playerdata;
+
+        private EntityManager manager;
+
         void Awake()
         {
             if (Instance == null)
@@ -29,7 +37,7 @@ namespace Assets
                 DontDestroyOnLoad(gameObject);
 
                 this.InitGameVariables();
-                MessageCenter<IGameStateChangeMessage>.Register(this);
+                EventCenter.GameStateChangeEvent.AddListener(m => this.GameStateChanged(m));
             }
             else
             {
@@ -48,12 +56,14 @@ namespace Assets
         {
             this.canvasScript = this.Canvas.GetComponent<CanvasScript>();
             this.timerScript = this.Canvas.GetComponent<TimerScript>();
+            manager = World.DefaultGameObjectInjectionWorld.EntityManager;
             this.DisableMenus();
         }
 
         public void RestartLevel()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            ////SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            EventCenter.PlayerPositionChangedEvent.Invoke(new SetPlayerPositionMessage());
             this.StartCountDown();
         }
 
@@ -81,7 +91,8 @@ namespace Assets
         private void LoadLevel(int level)
         {
             PlayerData.Instance.CurrentLevel = level;
-            SceneManager.LoadScene(level);
+            var lg = GameObject.FindObjectOfType<LevelGenerator>();
+            lg.SetUpLevel(level, 125, 750);
         }
 
         public void Quit()
@@ -134,16 +145,15 @@ namespace Assets
         public void FinishLevel()
         {
             Debug.Log("GameFinished");
-            this.StopPhysicsWorld();
+            Time.timeScale = 0;
             var time = this.timerScript.GetTime();
-            var bestTime = this.playerdata.GetBestTimeOfCurrentLevel();
+             var bestTime = this.playerdata.GetBestTimeOfCurrentLevel();
             if (time < bestTime)
             {
                 bestTime = time;
             }
 
             this.canvasScript.ShowFinish(time, bestTime);
-            Time.timeScale = 0;
             gameState = EGameState.Paused;
 
             this.playerdata.SetLevelData(this.playerdata.CurrentLevel, time, 1);
@@ -153,11 +163,6 @@ namespace Assets
             // show next start level
             // show level select 
             // show go home
-        }
-
-        private void StopPhysicsWorld()
-        {
-            // todo stop time
         }
 
         public void SetGameState(EGameState state)
@@ -172,7 +177,7 @@ namespace Assets
             this.canvasScript.SetGameOver(true);
         }
 
-        public void ExecuteMessage(IGameStateChangeMessage m)
+        public void GameStateChanged(IGameStateChangeMessage m)
         {
             if (m.Finish)
             {

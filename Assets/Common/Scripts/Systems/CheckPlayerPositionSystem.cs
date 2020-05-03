@@ -17,7 +17,7 @@ public class CheckPlayerPositionSystem : ComponentSystem
             {
                 if (pos.Value.y < -1.5f)
                 {
-                    MessageCenter<IGameStateChangeMessage>.Send(new GameStateChangeMessage() {GameOver = true});
+                    EventCenter.GameStateChangeEvent.Invoke(new GameStateChangeMessage() {GameOver = true});
                 }
             });
         }

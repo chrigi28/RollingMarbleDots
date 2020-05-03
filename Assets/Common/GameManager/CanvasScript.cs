@@ -19,7 +19,10 @@ public class CanvasScript : MonoBehaviour
 
     [UsedImplicitly]
     private GameObject CountDownLabel;
-    
+
+    private TextMeshProUGUI finishTime;
+    private TextMeshProUGUI bestTime;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -27,6 +30,8 @@ public class CanvasScript : MonoBehaviour
         FinishPanel = gameObject.transform.Find("FinishPanel").gameObject;
         PausePanel = gameObject.transform.Find("PausePanel").gameObject;
         CountDownLabel = gameObject.transform.Find("CountDownText").gameObject;
+        finishTime = this.FinishPanel.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(f => f.name == "Time");
+        bestTime = this.FinishPanel.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(f => f.name == "TimeBest");
     }
 
     public void SetGameOver(bool value)
@@ -48,9 +53,9 @@ public class CanvasScript : MonoBehaviour
 
     public void ShowFinish(float time, float besttime)
     {
-        var finishTime = this.FinishPanel.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(f => f.name == "Time");
+        
         finishTime.text = $"{time.ToString("F")}s";
-        var bestTime = this.FinishPanel.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(f => f.name == "TimeBest");
+        
         if (besttime < 10)
         {
             besttime = time;
@@ -58,9 +63,5 @@ public class CanvasScript : MonoBehaviour
 
         bestTime.text = $"{besttime.ToString("F")}s";
         this.FinishPanel.SetActive(true);
-    }
-
-    public void StartGame()
-    {
     }
 }

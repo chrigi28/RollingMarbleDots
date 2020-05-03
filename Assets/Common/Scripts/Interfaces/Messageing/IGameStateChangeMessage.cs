@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.Common.Scripts.Components
 {
@@ -14,5 +15,11 @@ namespace Assets.Common.Scripts.Components
         public bool GameOver { get; set; }
         public bool Pause { get; set; }
         public bool Finish { get; set; }
+    }
+
+
+    [System.Serializable]
+    public class GameStateChangeEvent : UnityEvent<GameStateChangeMessage>
+    {
     }
 }

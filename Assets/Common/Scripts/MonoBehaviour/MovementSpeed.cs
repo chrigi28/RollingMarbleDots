@@ -37,7 +37,7 @@ public class MovementSpeed : MonoBehaviour
         {
             manager.SetComponentData(entity, new PhysicsSpeedMultiplier {Value = movementMultiplier});
             oldValue = movementMultiplier;
-            MessageCenter<IMultiplierMessage>.Send(new MultiplierMessage(){Multiplier = movementMultiplier});
+            EventCenter.MultiplierChangedEvent.Invoke(new MultiplierMessage(){Multiplier = movementMultiplier});
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Assets;
+using Assets.Common.Scripts;
 using Assets.Common.Scripts.Components;
 using Unity.Burst.Intrinsics;
 using Unity.Entities;
@@ -10,14 +11,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [UpdateAfter(typeof(InputGatheringSystem))]
-class UpdatePlayerPositionSystem : ComponentSystem, IMessageReceiver<IMultiplierMessage>
+class UpdatePlayerPositionSystem : ComponentSystem
 {
     private float3 multiplier = float3.zero;
     
     protected override void OnCreate()
     {
         EntityManager.CreateEntity(typeof(CharacterControllerInput));
-        MessageCenter<IMultiplierMessage>.Register(this);
+        EventCenter.MultiplierChangedEvent.AddListener(m => this.ChangeMultiplier(m));
+        EventCenter.PlayerPositionChangedEvent.AddListener(m => this.SetPlayerPosition(m));
     }
 
     protected override void OnUpdate()
@@ -25,9 +27,7 @@ class UpdatePlayerPositionSystem : ComponentSystem, IMessageReceiver<IMultiplier
         if (GameManager.Instance.IsRunning())
         {
             var dt = Time.DeltaTime;
-            var inputData =
-                EntityManager.GetComponentData<CharacterControllerInput>(
-                    GetSingletonEntity<CharacterControllerInput>());
+            var inputData = EntityManager.GetComponentData<CharacterControllerInput>(GetSingletonEntity<CharacterControllerInput>());
 
             var move = new float3(inputData.Movement.x, inputData.Jumped ? 1 : 0, inputData.Movement.y);
             move *= multiplier * dt;
@@ -40,8 +40,19 @@ class UpdatePlayerPositionSystem : ComponentSystem, IMessageReceiver<IMultiplier
         }
     }
 
-    public void ExecuteMessage(IMultiplierMessage m)
+    public void ChangeMultiplier(MultiplierMessage m)
     {
         multiplier = m.Multiplier;
+    }
+
+    public void SetPlayerPosition(SetPlayerPositionMessage m)
+    {
+        Entities.WithAny<PlayerTagComponent>().ForEach((ref Translation pos, ref Rotation rot, ref PhysicsVelocity velo) =>
+        {
+            pos.Value = m.Position;
+            rot.Value = m.Rotation;
+            velo.Angular = m.Velocity.Angular;
+            velo.Linear= m.Velocity.Linear;
+        });
     }
 }
