@@ -15,7 +15,10 @@ public class CanvasScript : MonoBehaviour
     private GameObject PausePanel;
 
     [UsedImplicitly]
-    private GameObject FinishPanel;
+    private GameObject FinishPanelPortrait;
+
+    [UsedImplicitly]
+    private GameObject FinishPanelLandscape;
 
     [UsedImplicitly]
     private GameObject CountDownLabel;
@@ -27,11 +30,13 @@ public class CanvasScript : MonoBehaviour
     void Awake()
     {
         GameOverPanel = gameObject.transform.Find("GameOverPanel").gameObject;
-        FinishPanel = gameObject.transform.Find("FinishPanel").gameObject;
+        
+        FinishPanelPortrait = gameObject.transform.Find("FinishPanelPortrait").gameObject;
+        FinishPanelLandscape = gameObject.transform.Find("FinishPanelLandscape").gameObject;
         PausePanel = gameObject.transform.Find("PausePanel").gameObject;
         CountDownLabel = gameObject.transform.Find("CountDownText").gameObject;
-        finishTime = this.FinishPanel.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(f => f.name == "Time");
-        bestTime = this.FinishPanel.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(f => f.name == "TimeBest");
+        finishTime = this.FinishPanelPortrait.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(f => f.name == "Time");
+        bestTime = this.FinishPanelPortrait.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(f => f.name == "TimeBest");
     }
 
     public void SetGameOver(bool value)
@@ -48,20 +53,50 @@ public class CanvasScript : MonoBehaviour
     {
         this.GameOverPanel.SetActive(false);
         this.PausePanel.SetActive(false);
-        this.FinishPanel.SetActive(false);
-    }
+        this.FinishPanelPortrait.SetActive(false);
+        this.FinishPanelLandscape.SetActive(false);
+        }
 
     public void ShowFinish(float time, float besttime)
     {
-        
+        if (this.IsLandscape)
+        {
+            this.SetTime(true);
+            this.FinishPanelLandscape.SetActive(true);
+        }
+        else
+        {
+            this.SetTime(false)
+            this.FinishPanelPortrait.SetActive(true);
+        }
+
+    }
+
+    public void SetTime(bool landscape)
+    {
+        if (landscape)
+        {
+            finishTime = this.FinishPanelPortrait.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(f => f.name == "Time");
+            bestTime = this.FinishPanelPortrait.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(f => f.name == "TimeBest");
+        });
+
         finishTime.text = $"{time.ToString("F")}s";
-        
+
         if (besttime < 10)
         {
             besttime = time;
         }
 
         bestTime.text = $"{besttime.ToString("F")}s";
-        this.FinishPanel.SetActive(true);
+
     }
+    public bool IsLandscape
+    {
+        get
+        {
+            var res = Screen.currentResolution;
+            return res.width > res.height;
+        }
+    }
+
 }

@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Assets.Common.Scripts;
 using Assets.Common.Scripts.Components;
@@ -27,6 +30,7 @@ namespace Assets
         private TimerScript timerScript;
         private PlayerData playerdata;
 
+        private ConcurrentQueue<IGameStateChangeMessage> queue = new ConcurrentQueue<IGameStateChangeMessage>();
         private EntityManager manager;
 
         void Awake()
@@ -177,22 +181,49 @@ namespace Assets
             this.canvasScript.SetGameOver(true);
         }
 
+        void LateUpdate()
+        {
+            if (this.queue.Count > 0)
+            {
+                foreach (var m in this.queue)
+                {
+                    // make a queue and check in update loop for messages
+                    if (m.Finish)
+                    {
+                        this.FinishLevel();
+                    }
+
+                    if (m.GameOver)
+                    {
+                        this.GameOver();
+                    }
+
+                    if (m.Pause)
+                    {
+                        this.PauseGame();
+                    }
+                }
+            }
+        }
+
         public void GameStateChanged(IGameStateChangeMessage m)
         {
-            if (m.Finish)
-            {
-                this.FinishLevel();
-            }
+            this.queue.Enqueue(m);
+            ////// make a queue and check in update loop for messages
+            ////if (m.Finish)
+            ////{
+            ////    this.FinishLevel();
+            ////}
 
-            if (m.GameOver)
-            {
-                this.GameOver();
-            }
+            ////if (m.GameOver)
+            ////{
+            ////    this.GameOver();
+            ////}
 
-            if (m.Pause)
-            {
-                this.PauseGame();
-            }
+            ////if (m.Pause)
+            ////{
+            ////    this.PauseGame();
+            ////}
         }
     }
 }
