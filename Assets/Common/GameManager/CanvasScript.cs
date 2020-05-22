@@ -61,24 +61,29 @@ public class CanvasScript : MonoBehaviour
     {
         if (this.IsLandscape)
         {
-            this.SetTime(true);
+            this.SetTime(time, besttime, true);
             this.FinishPanelLandscape.SetActive(true);
         }
         else
         {
-            this.SetTime(false)
+            this.SetTime(time, besttime, false);
             this.FinishPanelPortrait.SetActive(true);
         }
 
     }
 
-    public void SetTime(bool landscape)
+    public void SetTime(float time, float besttime, bool landscape)
     {
         if (landscape)
         {
+            finishTime = this.FinishPanelLandscape.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(f => f.name == "Time");
+            bestTime = this.FinishPanelLandscape.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(f => f.name == "TimeBest");
+        }
+        else
+        {
             finishTime = this.FinishPanelPortrait.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(f => f.name == "Time");
             bestTime = this.FinishPanelPortrait.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(f => f.name == "TimeBest");
-        });
+        }
 
         finishTime.text = $"{time.ToString("F")}s";
 

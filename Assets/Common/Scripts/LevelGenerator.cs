@@ -81,7 +81,7 @@ namespace Assets.Common.Scripts
                 this.finish = this.EntityManager.Instantiate(entity);
             }
 
-            this.EntityManager.SetComponentData(this.finish, new Translation { Value = new float3(0, 0.01f, zPos) });
+            this.EntityManager.SetComponentData(this.finish, new Translation { Value = new float3(0, 0.1f, zPos) });
             this.EntityManager.SetComponentData(this.finish, new Rotation { Value = Quaternion.Euler(0, 0, 0) });
         }
 
@@ -131,7 +131,7 @@ namespace Assets.Common.Scripts
             this.EnableGrounds(levelLength);
 
             random = new Random((uint)level);
-            float3 min = new float3(-5, 2, firstLastPos);
+            float3 min = new float3(-5, 1, firstLastPos);
             float3 max = new float3(5, 3, levelLength - firstLastPos);
 
             float3 cubesize;

@@ -15,7 +15,7 @@ namespace Assets.Scripts
 
         void Awake()
         {
-            this.animator = GetComponent<Animator>();
+            ////this.animator = GetComponent<Animator>();
 
             this.CountdownText = GetComponentsInChildren<Text>(true).FirstOrDefault(f => f.name == "CountDownText");
             this.CounterText = GetComponentsInChildren<Text>(true).FirstOrDefault(f => f.name == "TimeText");
@@ -46,32 +46,34 @@ namespace Assets.Scripts
         // Update is called once per frame
         void Update()
         {
-            if (GameManager.Instance.IsCountDown)
+            if (GameManager.Instance != null)
             {
-                this.currentTime -= Time.deltaTime;
-            
-                if (this.currentTime > 0.5)
+                if (GameManager.Instance.IsCountDown)
                 {
-                    this.CountdownText.text = currentTime.ToString("0");
-                }
-                else
-                {
-                    this.CountdownText.text = "GO!";
-                    GameManager.Instance.ContinueGame();
-                    this.currentTime = 0f;
-                    this.animator.Play("TextFade");
-                }
-            }
-            else
-            if (GameManager.Instance.IsRunning())
-            {
-                if (this.currentTime > 1f)
-                {
-                    this.CountdownText.enabled = false;
-                }
+                    this.currentTime -= Time.deltaTime;
 
-                this.currentTime += Time.deltaTime;
-                this.CounterText.text = currentTime.ToString("F");
+                    if (this.currentTime > 0.5)
+                    {
+                        this.CountdownText.text = currentTime.ToString("0");
+                    }
+                    else
+                    {
+                        this.CountdownText.text = "GO!";
+                        GameManager.Instance.ContinueGame();
+                        this.currentTime = 0f;
+                        //this.animator.Play("TextFade");
+                    }
+                }
+                else if (GameManager.Instance.IsRunning())
+                {
+                    if (this.currentTime > 1f)
+                    {
+                        this.CountdownText.enabled = false;
+                    }
+
+                    this.currentTime += Time.deltaTime;
+                    this.CounterText.text = currentTime.ToString("F");
+                }
             }
         }
     }

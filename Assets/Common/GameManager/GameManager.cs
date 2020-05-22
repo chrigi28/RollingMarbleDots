@@ -183,9 +183,9 @@ namespace Assets
 
         void LateUpdate()
         {
-            if (this.queue.Count > 0)
+            while(this.queue.Count > 0)
             {
-                foreach (var m in this.queue)
+                if (this.queue.TryDequeue(out var m))
                 {
                     // make a queue and check in update loop for messages
                     if (m.Finish)
@@ -224,6 +224,6 @@ namespace Assets
             ////{
             ////    this.PauseGame();
             ////}
-        }
+         }
     }
 }
