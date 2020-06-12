@@ -67,7 +67,9 @@ namespace Assets
         public void RestartLevel()
         {
             ////SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            EventCenter.PlayerPositionChangedEvent.Invoke(new SetPlayerPositionMessage());
+            var startpos = float3.zero;
+            startpos.y = 1f;
+            EventCenter.PlayerPositionChangedEvent.Invoke(new SetPlayerPositionMessage {Position = startpos});
             this.StartCountDown();
         }
 

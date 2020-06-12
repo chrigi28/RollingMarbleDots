@@ -11,6 +11,6 @@ class EventCenter
     public static SetPlayerPositionEvent PlayerPositionChangedEvent = new SetPlayerPositionEvent();
     public static GameStateChangeEvent GameStateChangeEvent = new GameStateChangeEvent();
     public static MultiplierChangedEvent MultiplierChangedEvent = new MultiplierChangedEvent();
-
+    public static EnableJumpEvent EnableJumpEvent = new EnableJumpEvent();
 }
 

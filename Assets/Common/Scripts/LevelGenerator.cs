@@ -81,7 +81,7 @@ namespace Assets.Common.Scripts
                 this.finish = this.EntityManager.Instantiate(entity);
             }
 
-            this.EntityManager.SetComponentData(this.finish, new Translation { Value = new float3(0, 0.1f, zPos) });
+            this.EntityManager.SetComponentData(this.finish, new Translation { Value = new float3(0, 0.01f, zPos) });
             this.EntityManager.SetComponentData(this.finish, new Rotation { Value = Quaternion.Euler(0, 0, 0) });
         }
 
@@ -113,6 +113,7 @@ namespace Assets.Common.Scripts
             for (int z = 0; z < numberOfFloors; z++)
             {
                 pos = float3.zero;
+                pos.y = prefabGameObjects["Floor"].transform.localScale.y / 2;
                 pos.z = z * groundlenght;
                 this.EntityManager.SetComponentData(grounds[z], new Translation { Value = pos });
                 ////this.EntityManager.SetComponentData(grounds[y], new Rotation { Value = Quaternion.Euler(tempRot) });
